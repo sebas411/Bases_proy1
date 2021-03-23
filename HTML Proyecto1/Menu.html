@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Menu de opciones</title>
+	<style type="text/css">
+		* {
+			padding: 0px;
+			margin: 0px;
+		}
+
+		#header {
+			margin: auto;
+			width: 500px;
+			font-family: cambria, cambria, cambria;
+		}
+
+		ul, ol{
+			list-style: none;	
+		}
+		.nav li a{
+			background-color: #83c5be;
+			color:#073b4c;
+			text-decoration: none;
+			padding: 10px 15px;
+			display: block;
+		}
+
+		.nav li a:hover {
+			background-color: #ffffff;
+		}
+
+		.nav > li {
+			float: left;
+		}
+		.nav li ul {
+			display:none;
+ 			position: absolute;
+ 			min-width: 140px;
+ 		}
+
+		.nav li:hover > ul {
+			display: block;
+ 		}
+
+		.nav li ul li {
+			position: relative;
+ 		}
+
+		.nav li ul li ul {
+ 			right: -140px;
+ 			top: 0px;
+ 		}
+	</style>
+</head>
+<body>
+	<div id="header">
+		<ul class="nav">
+			<li><a href="busqueda.html">Busqueda</a></li>
+			<li><a href="Listas.html">Playlist</a>
+				<ul>
+					<li><a href="">Creación de Playlist</a></li>
+					<li><a href="">Mis Playlists </a></li>
+				</ul>
+			</li>	
+			<li><a href="index.html">Salir</a></li>
+		</ul>
+	</div>
+</body>
+</html>
