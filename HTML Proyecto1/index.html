@@ -13,6 +13,13 @@
 		<input class="buttons" type="submit" name="" value="Ingresar">
 		<p><a href="#">¿Ovidaste tu contraseña?</p>
 	</section>
+	<script>
+		fetch('http://localhost:3000/users').then((r) => r.json()).then((j) => {
+			j.forEach((usuario) => {
+				console.log(usuario)
+			})
+		})
+	</script>
 </body>
 </html>
 </html>

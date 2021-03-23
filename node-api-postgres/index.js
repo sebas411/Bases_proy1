@@ -1,6 +1,8 @@
 const express = require('express')
+const cors = require('cors')
 const bodyParser = require('body-parser')
 const app = express()
+const db = require('./queries')
 const port = 3000
 
 app.use(bodyParser.json())
@@ -10,10 +12,14 @@ app.use(
     })
 )
 
+app.use(cors({origin: 'null'}))
+
 app.get('/', (request, response) => {
     response.json({ info: 'Node.js, Express, and Postgres API' })
-  })
+})
 
-  app.listen(port, () => {
-    console.log(`App running on port ${port}.`)
-  })
+app.get('/users', db.getUsers)
+
+app.listen(port, () => {
+console.log(`App running on port ${port}.`)
+})
