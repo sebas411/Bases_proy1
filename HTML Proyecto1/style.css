@@ -1,0 +1,112 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+body {
+	font-family: cambria;
+	background-color: #d8e2dc;
+}
+
+.form-inicio {
+	width: 400px;
+	height: 340px;
+	background: #a8dadc;
+	margin: auto;
+	margin-top: 180px;
+	box-shadow: 7px 13px 37px #edf6f9;
+	padding: 20px 30px;
+	border-top: 4px solid #e63946;
+	color: white;
+}
+
+.form-inicio h5 {
+	margin: 0;
+	text-align: center;
+	height: 40px;
+	margin-bottom: 30px;
+	border-bottom: 1px solid;
+	font-size: 20px;
+}
+
+.controls {
+	width: 100%;
+	border: 1px solid #e63946;
+	margin-bottom: 15px;
+	padding: 11px 10px;
+	background: #ffcdb2;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.buttons {
+	width: 100%;
+	height: 40px;
+	background: #e63946;
+	border: none;
+	color: white;
+	margin-bottom: 16px;
+}
+.form-inicio p{
+	height: 40px;
+	text-align: center;
+	border-bottom:  1px solid;
+}
+
+.form-inicio a{
+	color: white;
+	text-decoration: none;
+	font-size: 14px;
+}
+
+.form-inicio a:hover{
+	text-decoration: underline;
+}
+
+@import url(http://fonts.googleapis.com/css?family=Montserrat+Alternates);
+
+* {
+    margin:0;
+    padding:0;
+    font:12pt Arial;
+}
+
+body {
+  background-color:#34495e;
+}
+
+.field {
+  display:flex;
+  position:realtive;
+  margin:5em auto;
+  width:70%;
+  flex-direction:row;
+  box-shadow:
+   1px 1px 0 rgb(22, 160, 133),
+   2px 2px 0 rgb(22, 160, 133),
+   3px 3px 0 rgb(22, 160, 133),
+   4px 4px 0 rgb(22, 160, 133),
+   5px 5px 0 rgb(22, 160, 133),
+   6px 6px 0 rgb(22, 160, 133),
+   7px 7px 0 rgb(22, 160, 133)
+  ;
+}
+
+.field>input[type=text],
+.field>button {
+  display:block;
+  font:1.2em 'Montserrat Alternates';
+}
+
+.field>input[type=text] {
+  flex:1;
+  padding:0.6em;
+  border:0.2em solid rgb(26, 188, 156);
+}
+
+.field>button {
+  padding:0.6em 0.8em;
+  background-color:rgb(26, 188, 156);
+  color:white;
+  border:none;
+}
