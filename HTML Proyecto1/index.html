@@ -14,11 +14,13 @@
 		<p><a href="#">¿Ovidaste tu contraseña?</p>
 	</section>
 	<script>
+		const usuarios = []
 		fetch('http://localhost:3000/users').then((r) => r.json()).then((j) => {
 			j.forEach((usuario) => {
-				console.log(usuario)
+				usuarios.push(usuario)
 			})
 		})
+		
 	</script>
 </body>
 </html>
