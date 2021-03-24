@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Lista de Reproducción</title>
+   <style type="text/css">
+      /* The navigation menu */
+      .nav {
+         overflow: hidden;
+         background-color: #c9ada7;
+      }
+
+      /* Navigation links */
+      .nav a {
+         float: left;
+         font-size: 16px;
+         color: white;
+         text-align: center;
+         padding: 14px 16px;
+         text-decoration: none;
+      }
+
+      /* The subnavigation menu */
+      .subnav {
+         float: left;
+         overflow: hidden;
+      }
+
+      /* Subnav button */
+      .subnav .subnavbtn {
+         font-size: 16px;
+         border: none;
+         outline: none;
+         color: white;
+         padding: 14px 16px;
+         background-color: inherit;
+         font-family: inherit;
+         margin: 0;
+      }
+
+      /* Add a red background color to navigation links on hover */
+      .nav a:hover, .subnav:hover .subnavbtn {
+         background-color: #9a031e;
+      }
+
+      /* Style the subnav content - positioned absolute */
+      .subnav-content {
+         display: none;
+         position: absolute;
+         left: 0;
+         background-color: #9a031e;
+         width: 100%;
+         z-index: 1;
+      }
+
+      /* Style the subnav links */
+      .subnav-content a {
+         float: left;
+         color: white;
+        text-decoration: none;
+      }
+
+      /* Add a grey background color on hover */
+      .subnav-content a:hover {
+        background-color: #9a031e;
+        color: black;
+      }
+
+      /* When you move the mouse over the subnav container, open the subnav content */
+      .subnav:hover .subnav-content {
+        display: block;
+      }
+      .nav h5{
+         margin: 0;
+         text-align: center;
+         height: 40px;
+         margin-bottom: 30px;
+         border-bottom: 1px solid;
+         font-size: 20px;
+      }
+      body {
+         background-color: #bccbfd;
+      }
+   </style>
+</head>
+<body>
+   <!-- Load font awesome icons -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <section class="nav">
+      <h5>Creacion de una Playlist</h5>
+      <!-- The navigation menu -->
+      <div class="subnav">
+         <button class="subnavbtn">Nombre de la Playlist <i class="fa fa-caret-down"></i></button>
+         <div class="subnav-content">
+            <p>Nombre: <input type="text" name="nombre_playlist"></p>
+            <p>
+               <input type="submit" value="Crear">
+            </p>
+         </div>
+      </div>
+      <div class="subnav">
+         <button class="subnavbtn">Agregar una cancion <i class="fa fa-caret-down"></i></button>
+         <div class="subnav-content">
+            <a href="#">Artista</a>
+            <a href="#">Cancion</a>
+            <a href="#">Album</a>
+         </div>
+      </div>
+      <div class="subnav">
+         <button class="subnavbtn">Regresar <i class="fa fa-caret-down"></i></button>
+         <div class="subnav-content">
+            <a href="Menu.html">Menu</a>
+            <a href="index.html">Salir</a>
+         </div>
+      </div>
+  </section>
+</body>
+</html>
