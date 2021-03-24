@@ -18,6 +18,14 @@
 		fetch('http://localhost:3000/users').then((r) => r.json()).then((j) => {
 			j.forEach((usuario) => {
 				usuarios.push(usuario)
+				if (document.form.password.value=='Contraseña' && document.form.login.value=='Usuario'){ 
+        		document.form.submit(); 
+    		} 
+   			 else{ 
+					
+         		alert("Porfavor ingrese, nombre de usuario y contraseña correctos."); 
+   		    } 
+
 			})
 		})
 		
