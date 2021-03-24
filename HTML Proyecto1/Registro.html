@@ -30,15 +30,24 @@
 			margin-bottom: 30px;
 			border-bottom: 1px solid;
 			font-size: 20px;
-}
+		}
+		.controls {
+			width: 100%;
+			border: 1px solid #e63946;
+			margin-bottom: 15px;
+			padding: 11px 10px;
+			background: #ffcdb2;
+			font-size: 14px;
+			font-weight: bold;
+		}
 	</style>
 </head>
 <body>
 	<section class="regis">
 		<h5>Registro</h5>
-		<p>Nombre: <input type="text" name="nombre"></p>
-		<p>E-mail: <input type="text" name="E-mail" size="40"></p>
-		<p>Contraseña: <input type="text" name="Contraseña" size="20"></p>
+		<input class="controls" type="text" name="nombre" value="" placeholder="Nombre">
+		<input class="controls" type="text" name="email" value="" placeholder="E-mail">
+		<input class="controls" type="text" name="contrasena" value="" placeholder="Contrasena">
 		<p>Tipo Suscripción:
 			<input type="radio" name="ain" value="a" required> Activa
 			<input type="radio" name="ain" value="i" required> Inactiva
