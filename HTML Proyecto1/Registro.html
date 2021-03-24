@@ -45,17 +45,21 @@
 <body>
 	<section class="regis">
 		<h5>Registro</h5>
-		<input class="controls" type="text" name="nombre" value="" placeholder="Nombre">
-		<input class="controls" type="text" name="email" value="" placeholder="E-mail">
-		<input class="controls" type="text" name="contrasena" value="" placeholder="Contrasena">
+		<input class="controls" type="text" name="usuario" value="" placeholder="Usuario">
+		<input class="controls" type="text" name="contrasena" value="" placeholder="Contraseña">
 		<p>Tipo Suscripción:
-			<input type="radio" name="ain" value="a" required> Activa
-			<input type="radio" name="ain" value="i" required> Inactiva
+			<input type="radio" name="ain" value="premium" required> Activa
+			<input type="radio" name="ain" value="free" required> Inactiva
 		</p>
 		<p>
-			<input type="submit" value="Enviar">
-    		<input type="reset" value="Borrar">
+			<input type="submit" id="submit" value="Enviar">
+    		<input type="reset" id="borrar" value="Borrar">
   		</p>
 	</section>
+	<script>
+		const suscripcion = document.getElementsByName('ain')
+		const submit = document.getElementById('submit')
+		const borrar = document.getElementById('borrar')
+	</script>
 </body>
 </html>

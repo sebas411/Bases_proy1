@@ -15,19 +15,33 @@
 	</section>
 	<script>
 		const usuarios = []
+		const boton = document.getElementsByClassName('buttons')[0]
+		const user = document.getElementsByName('usuario')[0]
+		const password = document.getElementsByName('contrasena')[0]
+
 		fetch('http://localhost:3000/users').then((r) => r.json()).then((j) => {
 			j.forEach((usuario) => {
 				usuarios.push(usuario)
-				if (document.form.password.value=='Contraseña' && document.form.login.value=='Usuario'){ 
-        		document.form.submit(); 
-    		} 
-   			 	else
-					{ 
-
-         				alert("Porfavor ingrese, nombre de usuario y contraseña correctos."); 
-   		    		} 
-
 			})
+		})
+
+		const validUser = () => {
+			let flag = false
+			usuarios.forEach(({ usuario, contrasenia }) => {
+				if (user.value === usuario && password.value === contrasenia) {
+					flag = true
+				}
+			})
+			return flag
+		}
+
+
+		boton.addEventListener('click', () => {
+			if (validUser()) {
+				console.log('acceso correcto')
+			} else {
+				console.log('acceso incorrecto')
+			}
 		})
 		
 	</script>
