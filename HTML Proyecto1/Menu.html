@@ -72,5 +72,15 @@
 			<li><a href="index.html">Salir</a></li>
 		</ul>
 	</div>
+	<script>
+		let queryString = decodeURIComponent(window.location.search)
+        queryString = queryString.substring(1)
+		const userID = parseInt(queryString)
+		fetch(`http://localhost:3000/users/${userID}`).then((r) => r.json()).then((j) => {
+			const user = j[0]
+			console.log(user)
+		})
+
+	</script>
 </body>
 </html>

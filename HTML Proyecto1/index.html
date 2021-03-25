@@ -18,6 +18,7 @@
 		const boton = document.getElementsByClassName('buttons')[0]
 		const user = document.getElementsByName('usuario')[0]
 		const password = document.getElementsByName('contrasena')[0]
+		let userId = 0
 
 		fetch('http://localhost:3000/users').then((r) => r.json()).then((j) => {
 			j.forEach((usuario) => {
@@ -25,22 +26,20 @@
 			})
 		})
 
-		const validUser = () => {
-			let flag = false
-			usuarios.forEach(({ usuario, contrasenia }) => {
-				if (user.value === usuario && password.value === contrasenia) {
-					flag = true
-				}
-			})
-			return flag
-		}
-
 
 		boton.addEventListener('click', () => {
-			if (validUser()) {
-				console.log('acceso correcto')
+			let flag = false
+			usuarios.forEach(({ id, usuario, contrasenia }) => {
+				if (user.value === usuario && password.value === contrasenia) {
+					flag = true
+					userId=id
+				}
+			})
+			if (flag) {
+				const queryString = `?${userId}`
+       			window.location.href = `Menu.html${queryString}`
 			} else {
-				console.log('acceso incorrecto')
+				alert('acceso incorrecto')
 			}
 		})
 		

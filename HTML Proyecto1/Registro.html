@@ -57,9 +57,39 @@
   		</p>
 	</section>
 	<script>
+		const usuario = document.getElementsByName('usuario')[0]
+		const contrasena = document.getElementsByName('contrasena')[0]
 		const suscripcion = document.getElementsByName('ain')
 		const submit = document.getElementById('submit')
 		const borrar = document.getElementById('borrar')
+
+		submit.addEventListener('click', () => {
+			let tipoSuscripcion = 'free'
+			if (suscripcion[0].checked) {
+				tipoSuscripcion = suscripcion[0].value
+			} else {
+				tipoSuscripcion = suscripcion[1].value
+			}
+			const nuevoUsuario = {
+				usuario: usuario.value,
+				contrasenia: contrasena.value,
+				suscripcion: tipoSuscripcion
+			}
+			fetch('http://localhost:3000/users', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(nuevoUsuario)
+			}).then(window.location.href='index.html')
+		})
+
+		borrar.addEventListener('click', () => {
+			suscripcion[0].checked=false
+			suscripcion[1].checked=false
+			usuario.value=''
+			contrasena.value=''
+		})
 	</script>
 </body>
 </html>
