@@ -7,6 +7,7 @@ const pool = new Pool({
   port: 5432,
 })
 
+
 //Usuarios
 const getUsers = (request, response) => {
   pool.query('SELECT * FROM usuario ORDER BY id ASC', (error, results) => {
@@ -31,7 +32,7 @@ const getUserById = (request, response) => {
 const createUser = (request, response) => {
   const { usuario, contrasenia, suscripcion } = request.body
 
-  pool.query('INSERT INTO usuario (usuario, contrasenia, suscripcion) values ($1, $2, $3)',[usuario, contrasenia, suscripcion], (error, results) => {
+  pool.query('INSERT INTO usuario (usuario, contrasenia, perfil) values ($1, $2, $3)',[usuario, contrasenia, suscripcion], (error, results) => {
     if (error) {
       throw error
     }
@@ -41,11 +42,11 @@ const createUser = (request, response) => {
 
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id)
-  const { usuario, contrasenia, suscripcion } = request.body
+  const { usuario, contrasenia, perfil } = request.body
 
   pool.query(
-    'UPDATE usuario SET usuario = $1, contrasenia = $2, suscripcion = $3 WHERE id = $4',
-    [usuario, contrasenia, suscripcion, id],
+    'UPDATE usuario SET usuario = $1, contrasenia = $2, perfil = $3 WHERE id = $4',
+    [usuario, contrasenia, perfil, id],
     (error, results) => {
       if (error) {
         throw error
@@ -359,7 +360,7 @@ const getSongsOfAlbums = (request, response) => {
 const getSongsByAlbum = (request, response) => {
   const album_id = parseInt(request.params.id)
 
-  pool.query('SELECT * FROM cancion_album WHERE album_id = $1 ORDER BY album_id ASC', [album_id], (error, results) => {
+  pool.query('SELECT * FROM cancion_album INNER JOIN cancion ON cancion.id=cancion_id WHERE album_id = $1 ORDER BY album_id ASC', [album_id], (error, results) => {
     if (error) {
       throw error
     }
@@ -390,6 +391,35 @@ const deleteSongOfAlbum = (request, response) => {
   })
 }
 
+//reproducciones (usuario_id, cancion_id, fechareproduccion)
+const getReproductions = (request, response) => {
+  pool.query('SELECT * FROM reproducciones ORDER BY id ASC', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const getReproductionsToday = (request, response) => {
+  pool.query('SELECT * FROM reproducciones WHERE fechareproduccion=CURRENTDATE ORDER BY id ASC', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const addReproduction = (request, response) => {
+  const { usuario_id, cancion_id } = request.body
+
+  pool.query('INSERT INTO reproducciones (usuario_id, cancion_id) values ($1, $2)',[usuario_id,cancion_id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(201).send(`Reproduction created with ID: ${results.insertId}`)
+  })
+}
 
 module.exports = {
   //user
@@ -431,5 +461,9 @@ module.exports = {
   getSongsOfAlbums,
   getSongsByAlbum,
   addSongToAlbum,
-  deleteSongOfAlbum
+  deleteSongOfAlbum,
+  //reproductions
+  getReproductions,
+  getReproductionsToday,
+  addReproduction
 }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Reproducción</title>
+    </head>
+    <body>
+        <iframe id="video" width="560" height="315" src="" frameborder="0" gesture="media" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <script>
+            const player = document.getElementById('video')
+            const canciones = []
+            const id = sessionStorage.getItem('activeSong')
+            const a = document.createElement('a')
+            let cancion = {}
+
+            fetch(`http://localhost:3000/songs/${id}`).then(r => r.json()).then(j => {
+                cancion = j[0]
+            }).then(() => {
+                a.setAttribute('href', cancion.link)
+                a.innerHTML = cancion.nombre
+                document.body.append(a)
+                player.setAttribute('src', cancion.link.replace('watch?v=','embed/'))
+            })
+        </script>
+    </body>
+</html>

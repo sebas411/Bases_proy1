@@ -1,0 +1,15 @@
+insert into usuario(usuario, contrasenia, perfil) values('usuario1', '12345', 'premium');
+insert into usuario(usuario, contrasenia, perfil) values('usuario2', '54321', 'free');
+insert into usuario(usuario, contrasenia, perfil) values('daniela', '12345', 'premium');
+insert into usuario(usuario, contrasenia, perfil) values('laurelinda', '24680', 'free');
+insert into usuario(usuario, contrasenia, perfil) values('sebastian', '36911', 'premium');
+insert into artista(usuario_id, nombre) values(5, 'One Direction');
+insert into cancion(artista_id, nombre, genero, link) values(1, 'story of my life', 'pop', 'https://www.youtube.com/watch?v=W-TE_Ys4iwM');
+insert into artista(usuario_id, nombre ) values(3,'NSYNC');
+insert into cancion(artista_id, nombre, genero, link) values(2, 'bye bye bye', 'retro pop', 'https://www.youtube.com/watch?v=Eo-KmOd3i7s');
+insert into playlist (usuario_id, nombre) values(3, '90s');
+insert into playlist(usuario_id, nombre) values(5, 'pop actual');
+insert into album(artista_id, lanzamiento, nombre) values(2, '2000-03-21', 'No Strings Attached');
+insert into album(artista_id, lanzamiento, nombre) values(1, '2013-09-01', 'Midnight memories (Deluxe)');
+insert into cancion_playlist(cancion_id, playlist_id) values(1, 1);
+insert into cancion_album(cancion_id, album_id) values(1, 1);

@@ -81,7 +81,7 @@
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify(nuevoUsuario)
-			}).then(window.location.href='index.html')
+			}).then(alert('Usuario creado correctamente')).then(window.location.href='index.html')
 		})
 
 		borrar.addEventListener('click', () => {

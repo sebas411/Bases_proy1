@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Busquedas</title>
+        <style type="text/css">
+            @import url(http://fonts.googleapis.com/css?family=Montserrat+Alternates);
+            * {
+                margin:0;
+                padding:0;
+                font:12pt cambria;
+            }
+
+            body {
+                background-color:#34495e;
+            }
+
+            .field {
+                display:flex;
+                position:realtive;
+                margin:5em auto;
+                width:70%;
+                flex-direction:row;
+                box-shadow:
+                1px 1px 0 rgb(22, 160, 133),
+                2px 2px 0 rgb(22, 160, 133),
+                3px 3px 0 rgb(22, 160, 133),
+                4px 4px 0 rgb(22, 160, 133),
+                5px 5px 0 rgb(22, 160, 133),
+                6px 6px 0 rgb(22, 160, 133),
+                7px 7px 0 rgb(22, 160, 133);
+            }
+
+            .field>input[type=text],
+            .field>button {
+                display:block;
+                font:1.2em 'Montserrat Alternates';
+            }
+
+            .field>input[type=text] {
+                flex:1;
+                padding:0.6em;
+                border:0.2em solid rgb(26, 188, 156);
+            }
+
+            .field>button {
+                padding:0.6em 0.8em;
+                background-color:rgb(26, 188, 156);
+                color:white;
+                border:none;
+            }
+
+
+            #header {
+                margin: auto;
+                width: 500px;
+                font-family: cambria, cambria, cambria;
+            }
+
+            ul, ol{
+                list-style: none;	
+            }
+            .nav li a{
+                background-color: #83c5be;
+                color:#073b4c;
+                text-decoration: none;
+                padding: 10px 15px;
+                display: block;
+            }
+
+            .nav li a:hover {
+                background-color: #ffffff;
+            }
+
+            .nav > li {
+                float: left;
+            }
+            .nav li ul {
+                display:none;
+                position: absolute;
+                min-width: 140px;
+            }
+
+            .nav li:hover > ul {
+                display: block;
+            }
+
+            .nav li ul li {
+                position: relative;
+            }
+
+            .nav li ul li ul {
+                right: -140px;
+                top: 0px;
+            }
+
+            #responses {
+                width: 70%;
+                margin: 0 auto;
+                color: white;
+            }
+
+            #responses div{
+                font-size: large;
+                padding: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="field" id="searchform">
+            <ul class="nav">
+                <li> 
+                    <input type="text" id="searchterm" placeholder="¿Qué estás buscando?" />
+                    <button type="button" id="search">Buscar</button>
+                    <ul>
+                        <li><a class="select">Titulo</a></li>
+                        <li><a class="select">Genero</a></li>
+                        <li><a class="select">Artista</a></li>
+                        <li><a class="select">Album</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="responses"></div>
+        <script class="cssdeck" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script>
+            const input = document.getElementById('searchterm')
+            const botones = document.getElementsByClassName('select')
+            const buscar = document.getElementById('search')
+            const responses = document.getElementById('responses')
+            const usuario_id = parseInt(sessionStorage.getItem('user'), 10)
+            let searchType = 'Titulo'
+            let canciones = []
+            let artistas = []
+            let albums = []
+            let song_album = []
+            let usuario = {}
+            let reproducciones = 0
+
+            fetch(`http://localhost:3000/users/${usuario_id}`).then(r => r.json()).then(j => {
+                usuario = j[0]
+            })
+            fetch('http://localhost:3000/songs').then((r) => r.json()).then((j) => {
+                j.forEach((cancion) => {
+                    canciones.push(cancion)
+                })
+            })
+            fetch('http://localhost:3000/artists').then((r) => r.json()).then((j) => {
+                j.forEach((artista) => {
+                    artistas.push(artista)
+                })
+            })
+            fetch('http://localhost:3000/albums').then((r) => r.json()).then((j) => {
+                j.forEach((album) => {
+                    albums.push(album)
+                })
+            })
+            fetch('http://localhost:3000/song_album').then((r) => r.json()).then((j) => {
+                j.forEach((song) => {
+                    song_album.push(song)
+                })
+            })
+            fetch('http://localhost:3000/reproductions').then((r) => r.json()).then((j) => {
+                j.forEach((rep) => {
+                    if (rep.usuario_id === usuario_id) {
+                        console.log('hola')
+                        reproducciones += 1
+                    }
+                })
+            })
+
+
+            for (let i = 0; i < botones.length; i +=1){
+                const boton = botones[i]
+                boton.addEventListener('click', () => {
+                    searchType = boton.innerHTML
+                })
+            }
+
+            buscar.addEventListener('click', () => {
+                responses.innerHTML = ''
+                re = new RegExp(input.value, 'i')
+                let filtered = []
+                if (searchType === 'Titulo') {
+                    filtered = canciones.filter((cancion) => re.test(cancion.nombre))
+                } else if (searchType === 'Genero'){
+                    filtered = canciones.filter((cancion) => re.test(cancion.genero))
+                } else if (searchType === 'Artista'){
+                    filtered = canciones.filter((cancion) => {
+                        for (let i = 0; i < artistas.length; i += 1) {
+                            if (artistas[i].id === cancion.artista_id) {
+                                
+                                if (re.test(artistas[i].nombre)) return true
+                            }
+                        }
+                    })
+                } else {
+                    const searchedAlbums = []
+                    for (let i = 0; i < albums.length; i += 1) {
+                        if (re.test(albums[i].nombre)) {
+                            searchedAlbums.push(albums[i])
+                        }
+                    }
+                    const searchedSongs = []
+                    for (let i = 0; i < searchedAlbums.length; i += 1) {
+                        song_album.forEach((cancion) => {
+                            if (cancion.album_id === searchedAlbums[i].id) searchedSongs.push(cancion.cancion_id)
+                        })
+                    }
+                    filtered = canciones.filter((cancion) => {
+                        for (let i = 0; i < searchedSongs.length; i += 1) {
+                            if (searchedSongs[i] === cancion.id) return true
+                        }
+                    })
+                }
+                const elementos = filtered.map((cancion, index) => {
+                    const div = document.createElement('div')
+                    div.innerHTML=`${index} ${cancion.nombre}`
+                    div.addEventListener('click', () => {
+                        if (usuario.perfil !== 'free' || reproducciones < 3) {
+                            reproduccion = {usuario_id, cancion_id: cancion.id}
+                            fetch('http://localhost:3000/reproductions', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(reproduccion)
+                            }).then(() => {
+                                sessionStorage.setItem('activeSong',`${cancion.id}`) 
+                                window.location.href = 'reproduccion.html'})
+                        } else {
+                            alert('Ya no le quedan reproducciones por el dia de hoy')
+                        }
+                    })
+                    return div
+                })
+                const titles = document.createElement('div')
+                titles.innerHTML = 'No.       Nombre'
+                responses.append(titles)
+                elementos.forEach((elemento) => {
+                    responses.append(elemento)
+                })
+            })
+
+
+        </script>
+    </body>
+</html>

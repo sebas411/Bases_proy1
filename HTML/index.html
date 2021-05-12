@@ -11,7 +11,7 @@
 		<input class="controls" type="text" name="usuario" value="" placeholder="Usuario">
 		<input class="controls" type="password" name="contrasena" value="" placeholder="Contraseña">
 		<input class="buttons" type="submit" name="" value="Ingresar">
-		<p><a href="#">¿Ovidaste tu contraseña?</p>
+		<p><a href="Registro.html">Crear usuario</p>
 	</section>
 	<script>
 		const usuarios = []
@@ -28,16 +28,16 @@
 
 
 		boton.addEventListener('click', () => {
-			let flag = false
+			let correctLogin = false
 			usuarios.forEach(({ id, usuario, contrasenia }) => {
 				if (user.value === usuario && password.value === contrasenia) {
-					flag = true
+					correctLogin = true
 					userId=id
 				}
 			})
-			if (flag) {
-				const queryString = `?${userId}`
-       			window.location.href = `Menu.html${queryString}`
+			if (correctLogin) {
+				sessionStorage.setItem('user',`${userId}`)
+       			window.location.href = 'Menu.html'
 			} else {
 				alert('acceso incorrecto')
 			}

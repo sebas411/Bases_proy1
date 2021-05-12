@@ -1,8 +1,8 @@
 # Proyecto 1 de bases de datos
 ## Integrantes:
-Sebastián Maldonado
-Daniela Batz
-Laurelinda Gómez
+Sebastián Maldonado  
+Daniela Batz  
+Laurelinda Gómez  
 
 ### Instrucciones
 - Crear base de datos llamada proyecto1 y restaurar backup adjunto

@@ -65,6 +65,11 @@ app.get('/song_album/:id', db.getSongsByAlbum)
 app.post('/song_album', db.addSongToAlbum)
 app.delete('/song_album/:album_id/:cancion_id', db.deleteSongOfAlbum)
 
+//reproductions
+app.get('/reproductions', db.getReproductions)
+app.get('/reproductionsToday', db.getReproductionsToday)
+app.post('/reproductions', db.addReproduction)
+
 
 app.listen(port, () => {
 console.log(`App running on port ${port}.`)
