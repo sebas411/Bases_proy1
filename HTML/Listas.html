@@ -91,18 +91,13 @@
       <div class="subnav">
          <button class="subnavbtn">Nombre de la Playlist <i class="fa fa-caret-down"></i></button>
          <div class="subnav-content">
-            <p>Nombre: <input type="text" name="nombre_playlist"></p>
-            <p>
-               <input type="submit" value="Crear">
-            </p>
+            <p>Nombre: <input id="nombre" type="text" name="nombre_playlist"></p>
          </div>
       </div>
       <div class="subnav">
          <button class="subnavbtn">Agregar una cancion <i class="fa fa-caret-down"></i></button>
-         <div class="subnav-content">
-            <a href="#">Artista</a>
-            <a href="#">Cancion</a>
-            <a href="#">Album</a>
+         <div class="subnav-content" id="addSong">
+            <p>Cancion: <input id="cancion" type="text" name="nombre_cancion"></p>
          </div>
       </div>
       <div class="subnav">
@@ -112,6 +107,37 @@
             <a href="index.html">Salir</a>
          </div>
       </div>
-  </section>
+      <p>
+         <input type="submit" value="Crear">
+      </p>
+   </section>
+   <script>
+      const nombre = document.getElementById('nombre')
+      const cancionIn = document.getElementById('cancion')
+      const userID = parseInt(sessionStorage.getItem('user'), 10)
+      let canciones = []
+      let usuario = {}
+
+      fetch(`http://localhost:3000/users/${userID}`).then((r) => r.json()).then((j) => {
+         usuario = j[0]
+      }).then(() => {
+         fetch('http://localhost:3000/songs/').then((r) => r.json()).then((j) => {
+            j.forEach(cancion => {
+               canciones.push(cancion)
+            })
+         })
+      }).then(() => {
+         cancionIn.addEventListener('change', () => {
+            const re = new RegExp(cancionIn.value, 'i')
+            const elements = canciones.filter(cancion => re.test(cancion)).map(cancion => {
+               const p = document.createElement('p')
+               p.innerHTML = cancion.nombre
+            })
+            const container = document.createElement('div')
+            elements.forEach(elemento => container.append(elemento))
+         })
+      })
+
+   </script>
 </body>
 </html>

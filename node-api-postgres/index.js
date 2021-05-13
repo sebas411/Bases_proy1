@@ -70,6 +70,17 @@ app.get('/reproductions', db.getReproductions)
 app.get('/reproductionsToday', db.getReproductionsToday)
 app.post('/reproductions', db.addReproduction)
 
+//reportes
+app.get('/reporte/1', db.reporte1)
+app.get('/reporte/2', db.reporte2)
+app.get('/reporte/3', db.reporte3)
+app.get('/reporte/4', db.reporte4)
+app.get('/reporte/5', db.reporte5)
+app.get('/reporte/6', db.reporte6)
+app.get('/reporte/7/:time1/:time2', db.reporte7)
+app.get('/reporte/8/:time1/:time2/:N', db.reporte8)
+app.get('/reporte/9/:time1/:time2', db.reporte9)
+app.get('/reporte/10/:artista_id/:N', db.reporte10)
 
 app.listen(port, () => {
 console.log(`App running on port ${port}.`)

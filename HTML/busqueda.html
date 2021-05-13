@@ -163,7 +163,6 @@
             fetch('http://localhost:3000/reproductions').then((r) => r.json()).then((j) => {
                 j.forEach((rep) => {
                     if (rep.usuario_id === usuario_id) {
-                        console.log('hola')
                         reproducciones += 1
                     }
                 })
@@ -179,7 +178,7 @@
 
             buscar.addEventListener('click', () => {
                 responses.innerHTML = ''
-                re = new RegExp(input.value, 'i')
+                const re = new RegExp(input.value, 'i')
                 let filtered = []
                 if (searchType === 'Titulo') {
                     filtered = canciones.filter((cancion) => re.test(cancion.nombre))

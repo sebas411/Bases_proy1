@@ -42,11 +42,11 @@ const createUser = (request, response) => {
 
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id)
-  const { usuario, contrasenia, perfil } = request.body
+  const { usuario, contrasenia, perfil, fechasuscripcion } = request.body
 
   pool.query(
-    'UPDATE usuario SET usuario = $1, contrasenia = $2, perfil = $3 WHERE id = $4',
-    [usuario, contrasenia, perfil, id],
+    'UPDATE usuario SET usuario = $1, contrasenia = $2, perfil = $3, fechasuscripcion = $4 WHERE id = $5',
+    [usuario, contrasenia, perfil, fechasuscripcion, id],
     (error, results) => {
       if (error) {
         throw error
@@ -402,7 +402,7 @@ const getReproductions = (request, response) => {
 }
 
 const getReproductionsToday = (request, response) => {
-  pool.query('SELECT * FROM reproducciones WHERE fechareproduccion=CURRENTDATE ORDER BY id ASC', (error, results) => {
+  pool.query('SELECT * FROM reproducciones WHERE fechareproduccion=CURRENT_DATE ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
     }
@@ -418,6 +418,161 @@ const addReproduction = (request, response) => {
       throw error
     }
     response.status(201).send(`Reproduction created with ID: ${results.insertId}`)
+  })
+}
+
+//reportes
+const reporte1 = (request, response) => {
+  pool.query('SELECT id, nombre, lanzamiento FROM album WHERE lanzamiento > (CURRENT_DATE-7) ORDER BY lanzamiento DESC', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const reporte2 = (request, response) => {
+  pool.query(`
+  SELECT artista.nombre as artista, count(reproducciones.id) as reproducciones
+  FROM (artista INNER JOIN cancion ON cancion.artista_id=artista.id) INNER JOIN reproducciones ON reproducciones.cancion_id=cancion.id
+  WHERE fechareproduccion > (CURRENT_DATE - INTERVAL '6 months')
+  GROUP BY artista.nombre
+  ORDER BY count(reproducciones.id) DESC
+  `, (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const reporte3 = (request, response) => {
+  pool.query(`
+  SELECT EXTRACT(MONTH FROM fechasuscripcion) as mes, count(fechasuscripcion) as suscripciones
+  FROM usuario
+  WHERE fechasuscripcion > (CURRENT_DATE - INTERVAL '6 months')
+  AND fechasuscripcion is not null
+  GROUP BY EXTRACT(MONTH FROM fechasuscripcion)
+  ORDER BY count(fechasuscripcion) DESC
+  `, (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const reporte4 = (request, response) => {
+  pool.query(`
+  SELECT artista.nombre, count(cancion.id) as canciones
+  FROM artista INNER JOIN cancion ON cancion.artista_id=artista.id
+  GROUP BY artista.nombre
+  ORDER BY count(cancion.id) DESC
+  `, (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const reporte5 = (request, response) => {
+  pool.query(`
+  SELECT genero, count(id) as num_canciones
+  FROM cancion
+  GROUP BY genero
+  ORDER BY count(id)
+  `, (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const reporte6 = (request, response) => {
+  pool.query(`
+  SELECT usuario.usuario, count(reproducciones.id) as reproducciones
+  FROM usuario INNER JOIN reproducciones ON usuario.id=reproducciones.usuario_id
+  GROUP BY usuario.usuario
+  ORDER BY count(reproducciones.id) DESC
+  `, (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const reporte7 = (request, response) => {
+  const time1 = request.params.time1
+  const time2 = request.params.time2
+  pool.query(`
+  SELECT count(*) as total_ventas
+  FROM reproducciones
+  WHERE fechareproduccion > $1
+  AND fechareproduccion < $2
+  `,[time1,time2], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const reporte8 = (request, response) => {
+  const time1 = request.params.time1
+  const time2 = request.params.time2
+  const N = parseInt(request.params.time2)
+  pool.query(`
+  SELECT artista.nombre, count(reproducciones.id)
+  FROM (reproducciones INNER JOIN cancion ON cancion.id=reproducciones.cancion_id) INNER JOIN artista ON artista.id=cancion.artista_id
+  WHERE fechareproduccion > $1
+  AND fechareproduccion < $2
+  GROUP BY artista.nombre
+  ORDER BY count(reproducciones.id) DESC
+  LIMIT $3
+  `,[time1,time2,N], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const reporte9 = (request, response) => {
+  const time1 = request.params.time1
+  const time2 = request.params.time2
+  pool.query(`
+  SELECT cancion.genero, count(reproducciones.id)
+  FROM reproducciones INNER JOIN cancion on cancion.id=reproducciones.cancion_id
+  WHERE fechareproduccion > $1
+  AND fechareproduccion < $2
+  GROUP BY cancion.genero
+  ORDER BY count(reproducciones.id)
+  `,[time1,time2], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const reporte10 = (request, response) => {
+  const artista_id = parseInt(request.params.artista_id)
+  const N = parseInt(request.params.N)
+  pool.query(`
+  SELECT cancion.nombre, count(reproducciones.id)
+  FROM (reproducciones INNER JOIN cancion ON cancion.id=reproducciones.cancion_id) INNER JOIN artista ON artista.id=cancion.artista_id
+  WHERE artista_id=$1
+  GROUP BY cancion.nombre
+  ORDER BY count(reproducciones.id) DESC
+  LIMIT $2
+  `,[artista_id,N], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
   })
 }
 
@@ -465,5 +620,16 @@ module.exports = {
   //reproductions
   getReproductions,
   getReproductionsToday,
-  addReproduction
+  addReproduction,
+  //reportes
+  reporte1,
+  reporte2,
+  reporte3,
+  reporte4,
+  reporte5,
+  reporte6,
+  reporte7,
+  reporte8,
+  reporte9,
+  reporte10
 }

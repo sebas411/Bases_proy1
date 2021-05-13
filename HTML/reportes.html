@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes</title>
+</head>
+<body>
+    <div id="reportes16">
+        <button id="generar1">generar primeros 6 reportes</button>
+    </div>
+    <div id="reportes710">
+        <button id="generar2">generar siguientes 4 reportes</button>
+    </div>
+    <script>
+        const userID = parseInt(sessionStorage.getItem('user'), 10)
+        const reportesContainer1 = document.getElementById('reportes16')
+        const generar1 = document.getElementById('generar1')
+        const generar2 = document.getElementById('generar2')
+        let usuario = {}
+        const reportes = []
+
+        fetch(`http://localhost:3000/users/${userID}`).then(r => r.json()).then(j => usuario = j[0]).then(usuario => {
+            for (let i = 1; i <= 6; i += 1) {
+                fetch(`http://localhost:3000/reporte/${i}`).then(r => r.json()).then(j => {
+                    reportes.push(j)
+                })
+            }
+        })
+        generar1.addEventListener('click', () => {
+            console.log(reportes)
+            reportes.forEach((reporte, index) => {
+                console.log('hola')
+                const divReporte = document.createElement('div')
+                const p = document.createElement('p')
+                p.innerHTML = 'Reporte'+(index+1)
+                divReporte.append(p)
+                reporte.forEach(fila => {
+                    const div = document.createElement('div')
+                    div.innerHTML = JSON.stringify(reporte)
+                    divReporte.append(div)
+                })
+                reportesContainer1.append(divReporte)
+            })
+        })
+        generar2.addEventListener('click', () => {
+
+        })
+    </script>
+</body>
+</html>
