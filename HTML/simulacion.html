@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulación de operación</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    label {
+      margin-bottom: 10px;
+    }
+    input {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <a href="Menu.html">regresar</a>
+  <h1>Simulación de operación</h1>
+  <label for="fecha">
+    Fecha
+    <input id="fecha" type="date">
+  </label>
+  <label for="generados">
+    Tracks por generar
+    <input type="number" id="generados">
+  </label>
+  <label for="reproducidos">
+    Numero de reproducciones
+    <input type="number" id=reproducidos>
+  </label>
+  <button id="generar">Generar</button>
+  <script>
+    const fecha = document.getElementById('fecha')
+    const porGenerar = document.getElementById('generados')
+    const porReproducir =  document.getElementById('reproducidos')
+    const botonGenerar = document.getElementById('generar')
+    let canciones = []
+    let artistas = []
+    let usuarios = []
+    let generos = []
+    /* let usuario = {}
+    fetch(`http://localhost:3000/users/${usuario_id}`).then(r => r.json()).then(j => {
+        usuario = j[0]
+    }) */
+    fetch('http://localhost:3000/songs').then((r) => r.json()).then((j) => {
+      j.forEach((cancion) => {
+        canciones.push(cancion)
+      })
+    })
+    fetch('http://localhost:3000/artists').then((r) => r.json()).then((j) => {
+      j.forEach((artista) => {
+        artistas.push(artista)
+      })
+    })
+    fetch('http://localhost:3000/users').then((r) => r.json()).then((j) => {
+      j.forEach((usuario) => {
+        usuarios.push(usuario)
+      })
+    })
+    fetch('http://localhost:3000/generes').then((r) => r.json()).then((j) => {
+      j.forEach((genero) => {
+        generos.push(genero)
+      })
+    })
+
+    botonGenerar.addEventListener('click', () => {
+      const numGenerar = parseInt(porGenerar.value, 10)
+      const numReproducir = parseInt(porReproducir.value, 10)
+      const fechaGenerar = fecha.value
+      const numCanciones = canciones.length
+      const numArtistas = artistas.length
+      const numUsuarios = usuarios.length
+      const numGeneros = generos.length
+
+      const cancionesIds = []
+
+      const insertar = async (subDireccion, objeto, regresar = false) => {
+        const respuesta = await fetch(`http://localhost:3000/${subDireccion}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(objeto)
+        })
+        if (regresar) return (respuesta.json())
+      }
+
+      const generarTracks = async () => {
+        for (let i = 0; i < numGenerar; i ++) {
+          const newSong = {
+            artista_id: artistas[Math.floor(Math.random()*numArtistas)].id,
+            nombre: `Cancion ${numCanciones + i + 1}`,
+            genero_id: generos[Math.floor(Math.random()*numGeneros)].id,
+            link: 'https://www.youtube.com/'
+          }
+          console.log(`cancion ${i+1}`)
+          const respuesta = await insertar('songs',newSong, true)
+          cancionesIds.push(respuesta[0].id)
+        }
+        return('generar Done')
+      }
+
+      const reproducirTracks = async () => {
+        for (let i = 0; i < numReproducir; i++) {
+          const newRep = {
+            cancion_id: cancionesIds[Math.floor(Math.random()*numGenerar)],
+            usuario_id: usuarios[Math.floor(Math.random()*numUsuarios)].id,
+            fechareproduccion: fechaGenerar
+          }
+          console.log('rep', i+1)
+          await insertar('reproductionsDate', newRep)
+        }
+        setTimeout(async () => location.reload(), 15*numReproducir)
+      }
+      generarTracks()
+      setTimeout(reproducirTracks, 20*numGenerar)
+      
+    })
+
+    
+
+  </script>
+</body>
+</html>

@@ -266,13 +266,13 @@ const getSongById = (request, response) => {
 }
 
 const createSong = (request, response) => {
-  const { artista_id, nombre, genero, link } = request.body
+  const { artista_id, nombre, genero_id, link } = request.body
 
-  pool.query('INSERT INTO cancion (artista_id, nombre, genero, link) values ($1, $2, $3, $4)',[artista_id, nombre, genero, link], (error, results) => {
+  pool.query('INSERT INTO cancion (artista_id, nombre, genero_id, link) values ($1, $2, $3, $4) returning id',[artista_id, nombre, genero_id, link], (error, result) => {
     if (error) {
       throw error
     }
-    response.status(201).send(`Song added with ID: ${results.insertId}`)
+    response.status(201).json(result.rows)
   })
 }
 
@@ -413,11 +413,32 @@ const getReproductionsToday = (request, response) => {
 const addReproduction = (request, response) => {
   const { usuario_id, cancion_id } = request.body
 
-  pool.query('INSERT INTO reproducciones (usuario_id, cancion_id) values ($1, $2)',[usuario_id,cancion_id], (error, results) => {
+  pool.query('INSERT INTO reproducciones (usuario_id, cancion_id) values ($1, $2) returning id',[usuario_id,cancion_id], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(201).json(results.rows)
+  })
+}
+
+const addRepDate = (request, response) => {
+  const { usuario_id, cancion_id, fechareproduccion } = request.body
+
+  pool.query('INSERT INTO reproducciones (usuario_id, cancion_id, fechareproduccion) values ($1, $2, $3)',[usuario_id,cancion_id,fechareproduccion], (error, results) => {
     if (error) {
       throw error
     }
     response.status(201).send(`Reproduction created with ID: ${results.insertId}`)
+  })
+}
+
+// generos (genero)
+const getGeneros = (request, response) => {
+  pool.query('SELECT * FROM genero ORDER BY id ASC', (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
   })
 }
 
@@ -621,6 +642,9 @@ module.exports = {
   getReproductions,
   getReproductionsToday,
   addReproduction,
+  addRepDate,
+  //generos
+  getGeneros,
   //reportes
   reporte1,
   reporte2,

@@ -69,6 +69,10 @@ app.delete('/song_album/:album_id/:cancion_id', db.deleteSongOfAlbum)
 app.get('/reproductions', db.getReproductions)
 app.get('/reproductionsToday', db.getReproductionsToday)
 app.post('/reproductions', db.addReproduction)
+app.post('/reproductionsDate', db.addRepDate)
+
+//generos
+app.get('/generes', db.getGeneros)
 
 //reportes
 app.get('/reporte/1', db.reporte1)
