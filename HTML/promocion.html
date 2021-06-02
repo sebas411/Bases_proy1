@@ -9,91 +9,11 @@
 <body>
   <a href="Menu.html">regresar</a>
   <h1>Recomendaciones personales</h1>
-  <ul>
-    <li>
-      <span>Usuario 1</span>
-      <ol>
-        <li>Cancion 1</li>
-        <li>Cancion 2</li>
-        <li>Cancion 3</li>
-      </ol>
-    </li>
-    <li>
-      <span>Usuario 2</span>
-      <ol>
-        <li>Cancion 1</li>
-        <li>Cancion 2</li>
-        <li>Cancion 3</li>
-      </ol>
-    </li>
-    <li>
-      <span>Usuario 3</span>
-      <ol>
-        <li>Cancion 1</li>
-        <li>Cancion 2</li>
-        <li>Cancion 3</li>
-      </ol>
-    </li>
-    <li>
-      <span>Usuario 4</span>
-      <ol>
-        <li>Cancion 1</li>
-        <li>Cancion 2</li>
-        <li>Cancion 3</li>
-      </ol>
-    </li>
-    <li>
-      <span>Usuario 5</span>
-      <ol>
-        <li>Cancion 1</li>
-        <li>Cancion 2</li>
-        <li>Cancion 3</li>
-      </ol>
-    </li>
-    <li>
-      <span>Usuario 6</span>
-      <ol>
-        <li>Cancion 1</li>
-        <li>Cancion 2</li>
-        <li>Cancion 3</li>
-      </ol>
-    </li>
-    <li>
-      <span>Usuario 7</span>
-      <ol>
-        <li>Cancion 1</li>
-        <li>Cancion 2</li>
-        <li>Cancion 3</li>
-      </ol>
-    </li>
-    <li>
-      <span>Usuario 8</span>
-      <ol>
-        <li>Cancion 1</li>
-        <li>Cancion 2</li>
-        <li>Cancion 3</li>
-      </ol>
-    </li>
-    <li>
-      <span>Usuario 9</span>
-      <ol>
-        <li>Cancion 1</li>
-        <li>Cancion 2</li>
-        <li>Cancion 3</li>
-      </ol>
-    </li>
-    <li>
-      <span>Usuario 10</span>
-      <ol>
-        <li>Cancion 1</li>
-        <li>Cancion 2</li>
-        <li>Cancion 3</li>
-      </ol>
-    </li>
-  </ul>
   <button id="recomendar">Recomendar</button>
+  <ul id="lista"></ul>
   <script>
     const boton = document.getElementById('recomendar')
+    const ul = document.getElementById('lista')
 
     boton.addEventListener('click', async () => {
       const usuarios = await fetch('http://localhost:3000/mongo').then((r) => r.json())
@@ -117,9 +37,10 @@
       const generosPorUsuario = []
       const cancionesPorGenero = {}
 
-      listaUsuarios.forEach(usuario => {
+      listaUsuarios.forEach((user) => {
         const generosCount = {}
-        usuario.reproducciones.forEach(reproduccion => {
+        console.log(user)
+        if (user) {user.reproducciones.forEach(reproduccion => {
           // const isInGeneros = false
           if (generosCount[reproduccion.genero]) generosCount[reproduccion.genero] +=1
           else generosCount[reproduccion.genero] = 1
@@ -127,11 +48,47 @@
           if (cancionesPorGenero[reproduccion.genero]) {if (!cancionesPorGenero[reproduccion.genero].includes(reproduccion.cancion)) cancionesPorGenero[reproduccion.genero].push(reproduccion.cancion)}
           else cancionesPorGenero[reproduccion.genero] = [reproduccion.cancion]
         })
-        generosPorUsuario.push({usuario: usuario.nombre, generosCount})
+        generosPorUsuario.push({usuario: user.nombre, generosCount})}
       })
-      console.log(cancionesPorGenero)
 
-      
+      generosPorUsuario.forEach(usuario => {
+        const span = document.createElement('span')
+        span.innerHTML = usuario.usuario
+        const li = document.createElement('li')
+        const ol = document.createElement('ol')
+        li.append(span)
+        const generomax = {genero: 'ninguno', count: 0}
+        for (const genero in usuario.generosCount) {
+          if (usuario.generosCount[genero]>generomax.count) {
+            generomax.genero = genero
+            generomax.count = usuario.generosCount[genero]
+          }
+        }
+        span2 = document.createElement('span')
+        span2.innerHTML = ` genero recomendado:   ${generomax.genero}`
+        span2.style.marginLeft = '80px'
+        li.append(span2)
+        const numCancionesGenero = cancionesPorGenero[generomax.genero] ? cancionesPorGenero[generomax.genero].length : 0
+        const numRevisar = Math.min(numCancionesGenero, 3)
+        const ind = []
+        for (let i = 0; i < numRevisar; i++) {
+          while (true) {
+            const cancionRand = cancionesPorGenero[generomax.genero][Math.floor(Math.random()*numCancionesGenero)]
+            if (!ind.includes(cancionRand)) {
+              ind.push(cancionRand)
+              break
+            }
+          }
+        }
+        ind.forEach(cancion => {
+          const li2 = document.createElement('li')
+          li2.innerHTML = cancion
+          ol.append(li2)
+        })
+        li.append(ol)
+        ul.append(li)
+      })
+
     })
     
   </script>
