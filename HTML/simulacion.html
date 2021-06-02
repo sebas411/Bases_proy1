@@ -17,24 +17,52 @@
     input {
       margin-left: 10px;
     }
+    .simu{
+      width: 400px;
+      height: 340px;
+      background: #a8dadc;
+      margin: auto;
+      margin-top: 180px;
+      padding: 50px 50px;
+      border-top: 4px solid #6b705c;
+      color: white;
+      text-align: center;
+    }
+    .simu h1{
+      margin: 0;
+      text-align: center;
+      height: 50px;
+      margin-bottom: 30px;
+      border-bottom: 2px solid;
+      font-size: 35px;
+      color: #1d3557;
+    }
+    .button{
+      font-family: cambria;
+      color: black;
+      background-color: white;
+      font-size: 15px;
+    }
   </style>
 </head>
-<body>
-  <a href="Menu.html">regresar</a>
-  <h1>Simulación de operación</h1>
-  <label for="fecha">
-    Fecha
-    <input id="fecha" type="date">
-  </label>
-  <label for="generados">
-    Tracks por generar
-    <input type="number" id="generados">
-  </label>
-  <label for="reproducidos">
-    Numero de reproducciones
-    <input type="number" id=reproducidos>
-  </label>
-  <button id="generar">Generar</button>
+<body style="background-color: gray">
+  <section class="simu">
+    <button><a href="Menu.html">regresar</a></button>
+    <h1>Simulación de operación</h1>
+    <label for="fecha">
+      Fecha
+      <input id="fecha" type="date">
+    </label>
+    <label for="generados">
+      Tracks por generar
+      <input type="number" id="generados">
+    </label>
+    <label for="reproducidos">
+      Numero de reproducciones
+      <input type="number" id=reproducidos>
+    </label>
+    <button id="generar">Generar</button>
+  </section>
   <script>
     const fecha = document.getElementById('fecha')
     const porGenerar = document.getElementById('generados')
