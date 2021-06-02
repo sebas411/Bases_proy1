@@ -45,10 +45,10 @@
     peticion('songs').then(j => canciones = j)
     peticion('generes').then(j => generos = j)
 
-    boton.addEventListener('click', () => {
+    boton.addEventListener('click', async () => {
       const fecha = fechaInput.value
       const reproduccionesFecha = reproducciones.filter(reproduccion => reproduccion.fechareproduccion.split('T')[0] === fecha)
-      const mongoInput = []
+      const mongoInput = await peticion('mongo')
 
       reproduccionesFecha.forEach(reproduccion => {
         const usuarioRep = usuarios.find(usuario => usuario.id === reproduccion.usuario_id)
@@ -58,7 +58,7 @@
         let isInMongo = false
         let mongoLocation = 0
         mongoInput.forEach((usuario, index) => {
-          if (usuario.id===reproduccion.usuario_id) {
+          if (usuario._id===reproduccion.usuario_id) {
             isInMongo = true
             mongoLocation = index
           }
@@ -72,7 +72,7 @@
           })
         } else { //create
           mongoInput.push({
-            id: reproduccion.usuario_id,
+            _id: reproduccion.usuario_id,
             nombre: usuarioRep.usuario,
             reproducciones: [{
               fecha: reproduccion.fechareproduccion,
@@ -83,6 +83,13 @@
         }
       })
       console.log(mongoInput)
+      fetch(`http://localhost:3000/mongo`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(mongoInput)
+      }).then(alert('datos almacenados en mongo'))
     })
   </script>
 </body>

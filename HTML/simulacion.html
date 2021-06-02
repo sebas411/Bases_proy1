@@ -113,7 +113,7 @@
           console.log('rep', i+1)
           await insertar('reproductionsDate', newRep)
         }
-        setTimeout(async () => location.reload(), Math.max(15*numReproducir, 400))
+        setTimeout(async () => {alert('tracks generados y reproducidos'); location.reload()}, Math.max(15*numReproducir, 400))
       }
       generarTracks()
       setTimeout(reproducirTracks, Math.max(20*numGenerar, 400))

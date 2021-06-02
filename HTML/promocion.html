@@ -91,11 +91,49 @@
       </ol>
     </li>
   </ul>
+  <button id="recomendar">Recomendar</button>
   <script>
-    fetch('http://localhost:3000/mongo').then((r) => r.json()).then((j) => {
-      console.log(j)
-      console.log('adios')
+    const boton = document.getElementById('recomendar')
+
+    boton.addEventListener('click', async () => {
+      const usuarios = await fetch('http://localhost:3000/mongo').then((r) => r.json())
+      const numUsuarios = usuarios.length
+      const numRecomendar = Math.min(numUsuarios, 10)
+      const listaIndices = []
+      for(let i = 0; i < numRecomendar; i++) {
+        while (true) {
+          const randUser = usuarios[Math.floor(Math.random()*numUsuarios)]
+          let isInLista = false
+          listaIndices.forEach(id => {
+            if (id === randUser._id) isInLista = true
+          })
+          if (!isInLista) {
+            listaIndices.push(randUser._id)
+            break
+          }
+        }
+      }
+      const listaUsuarios = listaIndices.map(indice => usuarios[indice])
+      const generosPorUsuario = []
+      const cancionesPorGenero = {}
+
+      listaUsuarios.forEach(usuario => {
+        const generosCount = {}
+        usuario.reproducciones.forEach(reproduccion => {
+          // const isInGeneros = false
+          if (generosCount[reproduccion.genero]) generosCount[reproduccion.genero] +=1
+          else generosCount[reproduccion.genero] = 1
+
+          if (cancionesPorGenero[reproduccion.genero]) {if (!cancionesPorGenero[reproduccion.genero].includes(reproduccion.cancion)) cancionesPorGenero[reproduccion.genero].push(reproduccion.cancion)}
+          else cancionesPorGenero[reproduccion.genero] = [reproduccion.cancion]
+        })
+        generosPorUsuario.push({usuario: usuario.nombre, generosCount})
+      })
+      console.log(cancionesPorGenero)
+
+      
     })
+    
   </script>
 </body>
 </html>

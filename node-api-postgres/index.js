@@ -91,13 +91,23 @@ app.get('/reporte/10/:artista_id/:N', db.reporte10)
 
 MongoClient.connect(url, {useUnifiedTopology:true}).then(client => {
     const mongodb = client.db('proyecto3')
+    const coleccion = mongodb.collection('usuarios')
     // MONGO
     app.get('/mongo', async (req, res) => {
-        const cursor = await mongodb.collection('usuarios').find().toArray()
+        const cursor = await coleccion.find().toArray()
         res.status(200).json(cursor)
     })
-    app.post('/mongo', (req, res) => {})
-    app.put('/mongo', (req, res) => {})
+    app.post('/mongo', (req, res) => {
+        coleccion.insertMany(req.body)
+        res.status(201)
+    })
+    app.put('/mongo', (req, res) => {
+        const lista = req.body
+        lista.forEach(usuario => {
+            coleccion.replaceOne({_id: usuario._id}, usuario, {upsert: true})
+        });
+    })
+ 
     app.listen(port, () => {
         console.log(`App running on port ${port}.`)
     })
