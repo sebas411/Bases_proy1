@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "http-server ../HTML --cors"
+    "serve": "http-server ../HTML --cors",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,10 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "http-server": "^0.12.3",
+    "mongodb": "^3.6.9",
     "pg": "^8.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }

@@ -44,10 +44,7 @@
     let artistas = []
     let usuarios = []
     let generos = []
-    /* let usuario = {}
-    fetch(`http://localhost:3000/users/${usuario_id}`).then(r => r.json()).then(j => {
-        usuario = j[0]
-    }) */
+    
     fetch('http://localhost:3000/songs').then((r) => r.json()).then((j) => {
       j.forEach((cancion) => {
         canciones.push(cancion)
@@ -116,10 +113,10 @@
           console.log('rep', i+1)
           await insertar('reproductionsDate', newRep)
         }
-        setTimeout(async () => location.reload(), 15*numReproducir)
+        setTimeout(async () => location.reload(), Math.max(15*numReproducir, 400))
       }
       generarTracks()
-      setTimeout(reproducirTracks, 20*numGenerar)
+      setTimeout(reproducirTracks, Math.max(20*numGenerar, 400))
       
     })
 

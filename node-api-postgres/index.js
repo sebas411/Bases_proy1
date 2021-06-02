@@ -5,6 +5,9 @@ const app = express()
 const db = require('./queries')
 const port = 3000
 
+const {MongoClient} = require('mongodb')
+const url = 'mongodb://localhost:27017/'
+
 app.use(bodyParser.json())
 app.use(
     bodyParser.urlencoded({
@@ -86,6 +89,18 @@ app.get('/reporte/8/:time1/:time2/:N', db.reporte8)
 app.get('/reporte/9/:time1/:time2', db.reporte9)
 app.get('/reporte/10/:artista_id/:N', db.reporte10)
 
-app.listen(port, () => {
-console.log(`App running on port ${port}.`)
+MongoClient.connect(url, {useUnifiedTopology:true}).then(client => {
+    const mongodb = client.db('proyecto3')
+    // MONGO
+    app.get('/mongo', async (req, res) => {
+        const cursor = await mongodb.collection('usuarios').find().toArray()
+        res.status(200).json(cursor)
+    })
+    app.post('/mongo', (req, res) => {})
+    app.put('/mongo', (req, res) => {})
+    app.listen(port, () => {
+        console.log(`App running on port ${port}.`)
+    })
 })
+
+

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recomendaciones personales</title>
+</head>
+<body>
+  <a href="Menu.html">regresar</a>
+  <h1>Recomendaciones personales</h1>
+  <ul>
+    <li>
+      <span>Usuario 1</span>
+      <ol>
+        <li>Cancion 1</li>
+        <li>Cancion 2</li>
+        <li>Cancion 3</li>
+      </ol>
+    </li>
+    <li>
+      <span>Usuario 2</span>
+      <ol>
+        <li>Cancion 1</li>
+        <li>Cancion 2</li>
+        <li>Cancion 3</li>
+      </ol>
+    </li>
+    <li>
+      <span>Usuario 3</span>
+      <ol>
+        <li>Cancion 1</li>
+        <li>Cancion 2</li>
+        <li>Cancion 3</li>
+      </ol>
+    </li>
+    <li>
+      <span>Usuario 4</span>
+      <ol>
+        <li>Cancion 1</li>
+        <li>Cancion 2</li>
+        <li>Cancion 3</li>
+      </ol>
+    </li>
+    <li>
+      <span>Usuario 5</span>
+      <ol>
+        <li>Cancion 1</li>
+        <li>Cancion 2</li>
+        <li>Cancion 3</li>
+      </ol>
+    </li>
+    <li>
+      <span>Usuario 6</span>
+      <ol>
+        <li>Cancion 1</li>
+        <li>Cancion 2</li>
+        <li>Cancion 3</li>
+      </ol>
+    </li>
+    <li>
+      <span>Usuario 7</span>
+      <ol>
+        <li>Cancion 1</li>
+        <li>Cancion 2</li>
+        <li>Cancion 3</li>
+      </ol>
+    </li>
+    <li>
+      <span>Usuario 8</span>
+      <ol>
+        <li>Cancion 1</li>
+        <li>Cancion 2</li>
+        <li>Cancion 3</li>
+      </ol>
+    </li>
+    <li>
+      <span>Usuario 9</span>
+      <ol>
+        <li>Cancion 1</li>
+        <li>Cancion 2</li>
+        <li>Cancion 3</li>
+      </ol>
+    </li>
+    <li>
+      <span>Usuario 10</span>
+      <ol>
+        <li>Cancion 1</li>
+        <li>Cancion 2</li>
+        <li>Cancion 3</li>
+      </ol>
+    </li>
+  </ul>
+  <script>
+    fetch('http://localhost:3000/mongo').then((r) => r.json()).then((j) => {
+      console.log(j)
+      console.log('adios')
+    })
+  </script>
+</body>
+</html>

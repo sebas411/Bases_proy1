@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfilamiento en Mongo</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    label {
+      margin-bottom: 10px;
+    }
+    input {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <a href="Menu.html">regresar</a>
+  <h1>Perfilamiento en Mongo</h1>
+  <label for="fecha">
+    Fecha de reproducciones
+    <input type="date" id="fecha">
+  </label>
+  <button id="registrar">Registrar</button>
+  <script>
+    const fechaInput = document.getElementById('fecha')
+    const boton = document.getElementById('registrar')
+    let reproducciones = []
+    let usuarios = []
+    let canciones = []
+    let generos = []
+
+    const peticion = async (subDireccion) => {
+      const respuesta = await fetch(`http://localhost:3000/${subDireccion}`)
+      return (respuesta.json())
+    }
+
+    peticion('reproductions').then(j => reproducciones = j)
+    peticion('users').then(j => usuarios = j)
+    peticion('songs').then(j => canciones = j)
+    peticion('generes').then(j => generos = j)
+
+    boton.addEventListener('click', () => {
+      const fecha = fechaInput.value
+      const reproduccionesFecha = reproducciones.filter(reproduccion => reproduccion.fechareproduccion.split('T')[0] === fecha)
+      const mongoInput = []
+
+      reproduccionesFecha.forEach(reproduccion => {
+        const usuarioRep = usuarios.find(usuario => usuario.id === reproduccion.usuario_id)
+        const cancionRep = canciones.find(cancion => cancion.id === reproduccion.cancion_id)
+        const generoRep = generos.find(genero => genero.id === cancionRep.genero_id)
+        //flag
+        let isInMongo = false
+        let mongoLocation = 0
+        mongoInput.forEach((usuario, index) => {
+          if (usuario.id===reproduccion.usuario_id) {
+            isInMongo = true
+            mongoLocation = index
+          }
+        })
+        
+        if (isInMongo) { //add
+          mongoInput[mongoLocation].reproducciones.push({
+            fecha: reproduccion.fechareproduccion,
+            cancion: cancionRep.nombre,
+            genero: generoRep.nombre
+          })
+        } else { //create
+          mongoInput.push({
+            id: reproduccion.usuario_id,
+            nombre: usuarioRep.usuario,
+            reproducciones: [{
+              fecha: reproduccion.fechareproduccion,
+              cancion: cancionRep.nombre,
+              genero: generoRep.nombre
+            }]
+          })
+        }
+      })
+      console.log(mongoInput)
+    })
+  </script>
+</body>
+</html>
