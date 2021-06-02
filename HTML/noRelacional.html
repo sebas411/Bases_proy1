@@ -5,7 +5,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Perfilamiento en Mongo</title>
-  <style>
+<style type="text/css">
+    * {
+      padding: 0px;
+      margin: 0px;
+    }
+
+    #header {
+      margin: auto;
+      width: 500px;
+      font-family: cambria, cambria, cambria;
+    }
     body {
       display: flex;
       flex-direction: column;
@@ -17,16 +27,43 @@
     input {
       margin-left: 10px;
     }
+    .norel {
+      width: 400px;
+      height: 340px;
+      background: #a8dadc;
+      margin: auto;
+      margin-top: 180px;
+      padding: 50px 50px;
+      border-top: 4px solid #6b705c;
+      color: white;
+      text-align: center;
+    }
+    .norel h1{
+      margin: 0;
+      text-align: center;
+      height: 50px;
+      margin-bottom: 30px;
+      border-bottom: 2px solid;
+      font-size: 35px;
+      color: #1d3557;
+    }
+    .button{
+      font-family: cambria;
+      color: black;
+      background-color: white;
+      font-size: 15px;
   </style>
 </head>
-<body>
-  <a href="Menu.html">regresar</a>
-  <h1>Perfilamiento en Mongo</h1>
-  <label for="fecha">
-    Fecha de reproducciones
-    <input type="date" id="fecha">
-  </label>
-  <button id="registrar">Registrar</button>
+<body style="background-color: gray">
+  <section class="norel">
+    <button><a href="Menu.html">regresar</a></button>
+    <h1>Perfilamiento en Mongo</h1>
+    <label for="fecha">
+      Fecha de reproducciones
+      <input type="date" id="fecha">
+    </label>
+    <button id="registrar">Registrar</button>
+  </section>
   <script>
     const fechaInput = document.getElementById('fecha')
     const boton = document.getElementById('registrar')
