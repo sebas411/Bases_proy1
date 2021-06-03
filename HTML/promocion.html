@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Recomendaciones personales</title>
 <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
     .button{
       font-family: cambria;
       color: black;
@@ -26,7 +31,7 @@
       width: 50%;
       border-collapse: collapse;
       border: 3px #ddb892;
-      background-color:#43aa8b;
+      background-color:#bee1e6;
       border: 1px solid #000000;
     }
     tbody tr {
@@ -48,109 +53,14 @@
 <body style="background-color: gray">
   <button><a href="Menu.html">regresar</a></button>
   <h1>Recomendaciones personales</h1>
-  <table>
-    <thead>
-      <tr>
-        <th colspan="3"> Usuario 1
-          <tbody>
-          <tr>
-            <td>Canción 1</td>
-            <td>Canción 2</td>
-            <td>Canción 3</td>
-          </tr>
-        </tbody>
-        </th>
-        <th colspan="3"> Usuario 2
-        <tbody>
-          <tr>
-            <td>Canción 1</td>
-            <td>Canción 2</td>
-            <td>Canción 3</td>
-          </tr>
-        </tbody> 
-        </th>
-        <th colspan="3"> Usuario 3 
-          <tbody>
-          <tr>
-            <td>Canción 1</td>
-            <td>Canción 2</td>
-            <td>Canción 3</td>
-          </tr>
-        </tbody>
-        </th>
-        <th colspan="3"> Usuario 4 
-          <tbody>
-          <tr>
-            <td>Canción 1</td>
-            <td>Canción 2</td>
-            <td>Canción 3</td>
-          </tr>
-        </tbody>
-        </th>
-        <th colspan="3"> Usuario 5 
-          <tbody>
-          <tr>
-            <td>Canción 1</td>
-            <td>Canción 2</td>
-            <td>Canción 3</td>
-          </tr>
-        </tbody>
-        </th>
-        <th colspan="3"> Usuario 6 
-          <tbody>
-          <tr>
-            <td>Canción 1</td>
-            <td>Canción 2</td>
-            <td>Canción 3</td>
-          </tr>
-        </tbody>
-        </th>
-        <th colspan="3"> Usuario 7 
-          <tbody>
-          <tr>
-            <td>Canción 1</td>
-            <td>Canción 2</td>
-            <td>Canción 3</td>
-          </tr>
-        </tbody>
-        </th>
-        <th colspan="3"> Usuario 8 
-          <tbody>
-          <tr>
-            <td>Canción 1</td>
-            <td>Canción 2</td>
-            <td>Canción 3</td>
-          </tr>
-        </tbody>
-        </th>
-        <th colspan="3"> Usuario 9 
-          <tbody>
-          <tr>
-            <td>Canción 1</td>
-            <td>Canción 2</td>
-            <td>Canción 3</td>
-          </tr>
-        </tbody>
-        </th>
-        <th colspan="3"> Usuario 10 
-          <tbody>
-          <tr>
-            <td>Canción 1</td>
-            <td>Canción 2</td>
-            <td>Canción 3</td>
-          </tr>
-        </tbody>
-        </th>
-      </tr>
-    </thead>
-  </table>
   <button id="recomendar">Recomendar</button>
-  <ul id="lista"></ul>
+  <table id="tabla"></table>
   <script>
     const boton = document.getElementById('recomendar')
-    const ul = document.getElementById('lista')
+    const tabla = document.getElementById('tabla')
 
     boton.addEventListener('click', async () => {
+      tabla.innerHTML = ''
       const usuarios = await fetch('http://localhost:3000/mongo').then((r) => r.json())
       const numUsuarios = usuarios.length
       const numRecomendar = Math.min(numUsuarios, 10)
@@ -168,7 +78,7 @@
           }
         }
       }
-      const listaUsuarios = listaIndices.map(indice => usuarios[indice])
+      const listaUsuarios = listaIndices.map(indice => usuarios[indice-1])
       const generosPorUsuario = []
       const cancionesPorGenero = {}
 
@@ -187,11 +97,15 @@
       })
 
       generosPorUsuario.forEach(usuario => {
-        const span = document.createElement('span')
-        span.innerHTML = usuario.usuario
-        const li = document.createElement('li')
-        const ol = document.createElement('ol')
-        li.append(span)
+        const tbody1 = document.createElement('tbody')
+        const tr1 = document.createElement('tr')
+        const th = document.createElement('th')
+        th.setAttribute('colspan','3')
+        th.innerHTML = usuario.usuario
+        tr1.append(th)
+        tbody1.append(tr1)
+        const tbody2 = document.createElement('tbody')
+        const tr2 = document.createElement('tr')
         const generomax = {genero: 'ninguno', count: 0}
         for (const genero in usuario.generosCount) {
           if (usuario.generosCount[genero]>generomax.count) {
@@ -199,10 +113,17 @@
             generomax.count = usuario.generosCount[genero]
           }
         }
-        span2 = document.createElement('span')
+        /* span2 = document.createElement('span')
         span2.innerHTML = ` genero recomendado:   ${generomax.genero}`
         span2.style.marginLeft = '80px'
-        li.append(span2)
+        li.append(span2)*/
+        const tbody3 = document.createElement('tbody')
+        const tr3 = document.createElement('tr')
+        const td3_1 =document.createElement('td')
+        td3_1.setAttribute('colspan','3')
+        td3_1.innerHTML = `Genero preferido: ${generomax.genero}`
+        tr3.append(td3_1)
+        tbody3.append(tr3)
         const numCancionesGenero = cancionesPorGenero[generomax.genero] ? cancionesPorGenero[generomax.genero].length : 0
         const numRevisar = Math.min(numCancionesGenero, 3)
         const ind = []
@@ -216,14 +137,13 @@
           }
         }
         ind.forEach(cancion => {
-          const li2 = document.createElement('li')
-          li2.innerHTML = cancion
-          ol.append(li2)
+          const td = document.createElement('td')
+          td.innerHTML = cancion
+          tr2.append(td)
         })
-        li.append(ol)
-        ul.append(li)
+        tbody2.append(tr2)
+        tabla.append(tbody1,tbody3,tbody2)
       })
-
     })
     
   </script>
